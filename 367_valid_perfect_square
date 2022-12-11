@@ -1,0 +1,29 @@
+"""
+Given a positive integer num, write a function which returns True if num is a perfect square else False.
+Follow up: Do not use any built-in library function such as sqrt.
+Example 1:
+  Input: num = 16
+  Output: true
+Example 2:
+  Input: num = 14
+  Output: false
+將題目轉型為該數值為一陣列元素[1,2,3,4,5,...,num]中最大數，在該數列中要找到一個數，恰巧是該數的平方根。
+target = num
+value = medium * medium
+"""
+
+class Solution:
+    def isPerfectSquare(self, num: int) -> bool:
+        left = 1
+        right = num
+        target = num
+        while left <= right:
+            medium = (left + right) // 2
+            value = medium * medium
+            if value == target:
+                return True
+            elif target > value:
+                left = medium + 1
+            else:
+                right = medium - 1
+        return False
