@@ -1,0 +1,51 @@
+"""
+There is an integer array nums sorted in ascending order (with distinct values).
+Prior to being passed to your function, nums is possibly rotated at an unknown pivot index k (1 <= k < nums.length) such that the resulting array is [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]] (0-indexed). For example, [0,1,2,4,5,6,7] might be rotated at pivot index 3 and become [4,5,6,7,0,1,2].
+Given the array nums after the possible rotation and an integer target, return the index of target if it is in nums, or -1 if it is not in nums.
+You must write an algorithm with O(log n) runtime complexity.
+
+O(log n)的複雜度就是要用BS，但是BS就是要用在已排序好的陣列。
+[0,1,2,4,5,6,7] 可以把它看成[0,1,2,4,5,6,7]，medium=4, taget=0，
+[1,2,4,5,6,7,0] 可以把它看成[1,2,4,5,6,7], [0]，medium=5, taget=0，
+[2,4,5,6,7,0,1] 可以把它看成[2,4,5,6,7], [0,1]，medium=6, taget=0，
+[4,5,6,7,0,1,2] 可以把它看成[4,5,6,7], [0,1,2]，medium=7, taget=0，
+[5,6,7,0,1,2,4] 可以把它看成[5,6,7], [0,1,2,4]，medium=0, taget=0，
+[6,7,0,1,2,4,5] 可以把它看成[6,7], [0,1,2,4,5]，medium=1, taget=0，
+[7,0,1,2,4,5,6] 可以把它看成[7], [0,1,2,4,5,6]，medium=2, taget=0，
+在他rotation下，陣列被拆成左右兩個有序陣列。可以把該題看成左右兩個有序陣列做BS比較
+
+Example 1:
+  Input: nums = [4,5,6,7,0,1,2], target = 0
+  Output: 4
+
+Example 2:
+  Input: nums = [4,5,6,7,0,1,2], target = 3
+  Output: -1
+
+Example 3:
+  Input: nums = [1], target = 0
+  Output: -1
+
+"""
+class Solution:
+    def search(self, nums: List[int], target: int)->int:
+        left = 0
+        right = len(nums)-1
+        while left <=right:
+            medium = (left + right) // 2
+            if target == nums[medium]:
+                return medium
+            elif nums[left] <= nums[medium]:
+                # nums = [[4,5,6,7], [0,1,2]], left=4, medium=7, target=0
+                # nums = [0,1,2,4,5,6,7], left=0, medium=5, target=7
+                if target < nums[left] or target > nums[medium]:
+                    left = medium + 1
+                else:
+                    right = medium - 1
+            else:
+                # nums = [[6,7], [0,1,2,4,5]], right=5, medium=1, target=7
+                # nums = [0,1,2,4,5,6,7], left=0, medium=5, target=2
+                if target > nums[right] or target < nums[medium]:
+                    right = medium - 1
+                else:
+                    left = medium + 1
