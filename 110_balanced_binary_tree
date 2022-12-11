@@ -1,0 +1,39 @@
+"""
+110. Balanced Binary Tree
+Given a binary tree, determine if it is height-balanced.
+二元樹的缺點就是無法保持最佳狀態，當輸入的資料部分已排序的情況下，極有可能產生歪斜樹，使得樹高度增加，導致搜尋效率降低。
+平衡樹又稱AV樹，本身也是一個二元樹，左右樹高度差<=1。
+但當資料加入或刪除的時候，會先檢查樹高度是否平衡，不平衡就設法調整為平衡樹，而其調整樹高的動作會使得存取效率降低。
+Example 1:
+  Input: root = [3,9,20,null,null,15,7]
+  Output: true
+Example 2:
+  Input: root = [1,2,2,3,3,null,null,4,4]
+  Output: false
+Example 3:
+  Input: root = []
+  Output: true
+"""
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+
+    def dfs(self, root):
+        is_balance = False
+        if not root:
+            return True, 0
+        left_balance, left_depth = self.dfs(root.left)
+        right_balance, right_depth = self.dfs(root.right)
+        depth = max(left_depth, right_depth) + 1
+        if left_balance and right_balance and abs(left_depth - right_depth) <= 1:
+            is_balance = True
+        return is_balance, depth
+
+    def isBalanced(self, root: Optional[TreeNode]) -> bool:
+        is_balance, depth = self.dfs(root)
+        return is_balance
