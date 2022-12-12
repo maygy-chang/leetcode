@@ -1,0 +1,50 @@
+"""
+145. Binary Tree Postorder Traversal
+Given the root of a binary tree, return the postorder traversal of its nodes' values.
+Example 1:
+  Input: root = [1,null,2,3]
+  Output: [3,2,1]
+Example 2:
+  Input: root = []
+  Output: []
+Example 3:
+  Input: root = [1]
+  Output: [1]
+"""
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution1:
+
+    def postorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        result = []
+        stack = [root]
+        current = root
+        while stack:
+            if current:
+                result.append(current.val)
+                stack.append(current.left)
+                current = current.right
+            else:
+                current = stack.pop(-1)
+        /*反轉result*/
+        return result[::-1]
+
+class Solution2:
+
+    def postorder(self, root):
+        if not root:
+            return
+        self.postorder(root.left)
+        self.postorder(root.right)
+        self.result.append(root.val)
+
+    def postorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        self.result = []
+        self.postorder(root)
+        return self.result
