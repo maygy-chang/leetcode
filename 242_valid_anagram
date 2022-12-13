@@ -1,0 +1,24 @@
+"""
+242. Valid Anagram
+Given two strings s and t, return true if t is an anagram of s, and false otherwise.
+An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
+Example 1:
+  Input: s = "anagram", t = "nagaram"
+  Output: true
+Example 2:
+  Input: s = "rat", t = "car"
+  Output: false
+"""
+# 解題思維: 長度相等且頻率相等
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        is_anagram = False
+        symbols = set(s)
+        s_freq = {}
+        t_freq = {}
+        for symbol in symbols:
+            s_freq[symbol] = s.count(symbol)
+            t_freq[symbol] = t.count(symbol)
+        if s_freq == t_freq and len(s) == len(t):
+            is_anagram = True
+        return is_anagram
