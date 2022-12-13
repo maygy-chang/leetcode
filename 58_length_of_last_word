@@ -28,9 +28,12 @@ class Solution2:
     def lengthOfLastWord(self, s:str) -> int:
         i = len(s) - 1
         length = 0
+        # 句子有可能是"  Hello  "，句末有空白
+        # 找出去除後面空白後，第一個非空白指標
         while s[i] == "":
-            i += 1
+            i -= 1
+        # 從後面算回來，遇到空白跳出
         while i >= 0 and s[i] != "":
-            leng += 1
-            i += 1
+            length += 1
+            i -= 1
         return length
