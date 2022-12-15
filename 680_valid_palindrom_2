@@ -1,0 +1,43 @@
+"""
+680. Valid Palindrome II
+Given a string s, return true if the s can be palindrome after deleting at most one character from it.
+Example 1:
+  Input: s = "aba"
+  Output: true
+Example 2:
+  Input: s = "abca"
+  Output: true
+  Explanation: You could delete the character 'c'.
+Example 3:
+  Input: s = "abc"
+  Output: false
+"""
+class Solution1:
+
+    def validPalindrome(self, s: str) -> bool:
+        left = 0
+        right = len(s) - 1
+        while left < right:
+            if s[left] != s[right]:
+                skipL, skipR = s[left+1:right+1], s[left:right]
+                return (skipL == skipL[::-1] or skipR == skipR[::-1])
+            left, right = left + 1, right - 1
+        return True
+
+class Solution2:
+
+    def matching(self, s, left, right, count):
+        if count > 1:
+            return False
+        while left < right:
+            if s[left] == s[right]:
+                left += 1
+                right -= 1
+            else:
+                return self.matching(s, left + 1, right, count+1) or self.matching(s, left, right-1, count+1)
+        return True
+
+    def validPalindrome(self, s: str) -> bool:
+        left = 0
+        right = len(s) - 1
+        return self.matching(s, left, right, 0)
