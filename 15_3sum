@@ -1,0 +1,47 @@
+"""
+15. 3Sum
+Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+Notice that the solution set must not contain duplicate triplets.
+Example 1:
+  Input: nums = [-1,0,1,2,-1,-4]
+  Output: [[-1,-1,2],[-1,0,1]]
+  Explanation: 
+  nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0.
+  nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0.
+  nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0.
+  The distinct triplets are [-1,0,1] and [-1,-1,2].
+  Notice that the order of the output and the order of the triplets does not matter.
+Example 2:
+  Input: nums = [0,1,1]
+  Output: []
+  Explanation: The only possible triplet does not sum up to 0.
+Example 3:
+  Input: nums = [0,0,0]
+  Output: [[0,0,0]]
+  Explanation: The only possible triplet sums up to 0.
+"""
+class Solution1:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        result = []
+        # 將數值由小到大排序
+        nums.sort()
+        # 三個值分別為a, nums[left], nums[right]，且a<nums[left]<nums[right]
+        for i, a in enumerate(nums):
+            if i > 0 and a == nums[i-1]:
+                continue
+            left, right = i+1, len(nums)-1
+            # 用兩個指標去尋找第二第三個值，
+            while left < right:
+                threeSum = a + nums[left] + nums[right]
+                if threeSum > 0:
+                    # 總和大於0，表示第三個值太大，將右指標所移
+                    right -= 1
+                elif threeSum < 0:
+                    # 總和小於0，表示第二個值太大，將左指標右移
+                    left += 1
+                else:
+                    result.append([a, nums[left], nums[right]])
+                    left += 1
+                    while nums[left] == nums[left-1] and left < right:
+                        left += 1
+        return result
