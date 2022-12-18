@@ -1,0 +1,54 @@
+"""
+424. Longest Repeating Character Replacement
+You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times.
+Return the length of the longest substring containing the same letter you can get after performing the above operations.
+求字符串中一个最长的区间，该区间内的出现次数较少的字符的个数不超过 k。
+Example 1:
+  Input: s = "ABAB", k = 2
+  Output: 4
+  Explanation: Replace the two 'A's with two 'B's or vice versa.
+Example 2:
+  Input: s = "AABABBA", k = 1
+  Output: 4
+  Explanation: Replace the one 'A' in the middle with 'B' and form "AABBBBA".
+  The substring "BBBB" has the longest repeating letters, which is 4.
+
+"""
+s = "AABABBA", k=1, length = 7
+#-------------------------------------------------------------------------------------
+# right                |  0  |  1  |   2     |   3     |    4    |   5     |    6    |
+#--------------------------------------------------------------------------------------
+# left                 |  0                                      |   1     |    2
+#-------------------------------------------------------------------------------------
+# symbol               |  A  |  A  |   B     |   A     |    B    |   B     |    A    |
+#-------------------------------------------------------------------------------------
+# counter              |{A:1}|{A:2}|{A:2,B:1}|{A:3,B:1}|{A:3,B:2}|{A:2,B:3}|{A:2,B:3}|
+#-------------------------------------------------------------------------------------
+# maxfreq              |  1  |  2  |   2     |   3     |    3    |    3    |    3    | 
+#-------------------------------------------------------------------------------------
+# right-left+1-maxfreq |  0  |  0  |   1     |   1     |    2    |    2    |    2    | 
+#-------------------------------------------------------------------------------------
+# counter'             |{A:1}|{A:2}|{A:2,B:1}|{A:3,B:1}|{A:2,B:2}|{A:1,B:3}|{A:2,B:2}|
+#-------------------------------------------------------------------------------------
+# left'                |  0                            |    1    |    2    |    3    |
+#-------------------------------------------------------------------------------------
+# right-left +1        |  1  |  2  |   3     |   4     |    4    |    5    |    4    |
+#-------------------------------------------------------------------------------------
+# result               |  1  |  2  |   3     |   4     |    4    |    4    |    4    |
+#-------------------------------------------------------------------------------------
+
+
+class Solution:
+    def characterReplacement(self, s: str, k: int) -> int:
+        result = 0
+        left = 0
+        counter = collections.Counter()
+        maxfreq = 0
+        for right in range(len(s)):
+            counter[s[right]] += 1
+            maxfreq = counter.most_common(1)[0][1]
+            if (right - left + 1) - maxfreq > k:
+                counter[s[left]] -= 1
+                left += 1
+            result = max(result, right - left + 1)
+        return result
