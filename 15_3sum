@@ -45,3 +45,47 @@ class Solution1:
                     while nums[left] == nums[left-1] and left < right:
                         left += 1
         return result
+
+class Solution2:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        result = []
+        d = Counter(nums)
+        print(d)
+        pos = [x for x in d if x >0]
+        neg = [x for x in d if x <0]
+        if d.get(0, 0) > 2:
+            result.append([0,0,0])
+        for x in pos:
+            for y in neg:
+                s = -(x + y)
+                if s in d:
+                    if s == x and d[x] > 1:
+                        result.append([x, x, y])
+                    elif s == y and d[y] > 1:
+                        result.append([x, y, y])
+                    elif y < s < x:
+                        result.append([x, y, s])
+        return result
+        
+class Solution3:
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
+        # sorted nums to check data easily
+        nums.sort()
+        # use set to check non-deuplicated values
+        res = set()
+        # target = first + second + third
+        # third = target - first - second
+        # first range: index = 0 ~ len(nums) - 2 and first should not be deplicated
+        # second range: index - 1 ~ len(nums) - 1
+        # use hash map to check unique values like twoSums
+        for i, v in enumerate(nums[:-2]):
+            # skip duplicate values
+            if i >= 1 and v == nums[i-1]:
+                continue
+            hashmap = {}
+            for x in nums[i+1:]:
+                if not hashmap.__contains__(x):
+                    hashmap[-v-x] = 1
+                else:
+                    res.add((v, -v-x, x))
+        return list(res)
