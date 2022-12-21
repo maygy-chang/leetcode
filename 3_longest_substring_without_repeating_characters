@@ -108,7 +108,7 @@ class Solution2-3:
         return result
         
 /*O(1)解法*/
-class Solution:
+class Solution3-1:
 
     def lengthOfLongestSubstring(self, s: str) -> int:
         test = ""
@@ -124,3 +124,29 @@ class Solution:
             test = test + "".join(c)
             maxLength = max(len(test), maxLength)
         return maxLength
+        
+class Solution3-2:
+
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        last_idx = {}
+        max_len = 0
+        start_idx = 0
+        for i in range(0, len(s)):
+            if s[i] in last_idx:
+                start_idx = max(start_idx, last_idx[s[i]]+1)
+            max_len = max(max_len, i - start_idx+1)
+            last_idx[s[i]] = i
+        return max_len
+           
+class Solution3-3:
+    /*Time Complexity: O(n + d) where n is 字串長度 and d 字母數目*/
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        seen = {}
+        max_len = 0
+        start = 0
+        for end in range(len(s)):
+            if s[end] in seen:
+                start = max(start, seen[s[end]] + 1)
+            seen[s[end]] = end
+            max_len = max(max_len, end - start + 1)
+        return max_len
