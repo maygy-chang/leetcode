@@ -16,15 +16,111 @@ Example 3:
   Explanation: The answer is "wke", with the length of 3.
   Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
 """
-class Solution:
+/*O(n^3)的解法*/
+class Solution1:
+    /*邊走邊檢查這個字串是不是合格的字串*/
+    def areDistinct(self, s, i, j):
+        visited = [0] * 26
+        for k in range(i, j+1):
+            if visited[ord(s[k]) - ord('a')] == True:
+                return False
+            visited[ord(s[k]) - ord('a')] = True
+        return True
+
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        n = len(s)
+        res = 0
+        for i in range(n):
+            for j in range(i, n):
+                if self.areDistinct(s, i, j):
+                    /*如果是就比較最大值*/
+                    res = max(res, j-i+1)
+        return res
+        
+class Solution1-1:
+
+    def areDistinct(self, s, i, j):
+        visited = [0] * 26
+        for k in range(i, j+1):
+            if visited[ord(s[k]) - ord('a')] == True:
+                return False
+            visited[ord(s[k]) - ord('a')] = True
+        return True
+
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        n = len(s)
+        res = 0
+        output = {}
+        for i in range(n):
+            for j in range(i, n):
+                if self.areDistinct(s, i, j):
+                    output[s[i:j+1]] = j-i+1
+        res = max(output.values())
+        return res
+
+/*sliding window的作法，O(n^2)，因為都需要兩個for loop去遊走，一個是從頭走到尾，一個是邊走邊記邊清掉以前的紀錄*/
+class Solution2-1:
+
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        n = len(s)
+        res = 0
+        output = {}
+        for i in range(n):
+            visited = [0] * 26
+            for j in range(i, n):
+                /*邊走邊記錄字母出現的頻率，有重複就跳過*/
+                label = ord(s[j])-ord('a')
+                if visited[label] == True:
+                    break
+                else:
+                    res = max(res, j-i+1)
+                    visited[label] = True
+            visited[label] == False
+        return res
+
+class Solution2-2:
     def lengthOfLongestSubstring(self, s: str) -> int:
         charSet = set()
         left = 0
         result = 0
         for right in range(len(s)):
+            /*有重複就把之前的清掉，重新計算*/
             while s[right] in charSet:
                 charSet.remove(s[left])
                 left += 1
             charSet.add(s[right])
+            /*因為只計算最大的長度，所以就邊做邊比較長度*/
             result = max(result, right - left + 1)
         return result
+
+class Solution2-3:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        result = 0
+        left = 0
+        data_list = []
+        for right in range(len(s)):
+            if s[right] in data_list:
+                while s[right] in data_list:
+                    data_list.remove(s[left])
+                    left += 1
+            data_list.append(s[right])
+            result = max(result, len(data_list))
+        return result
+        
+/*O(1)解法*/
+class Solution:
+
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        test = ""
+        maxLength = -1
+        if len(s) == 0:
+            return 0
+        if len(s) == 1:
+            return 1
+        for c in list(s):
+            current = "".join(c)
+            if current in test:
+                test = test[test.index(current) + 1:]
+            test = test + "".join(c)
+            maxLength = max(len(test), maxLength)
+        return maxLength
