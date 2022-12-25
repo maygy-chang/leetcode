@@ -10,7 +10,7 @@ Example 2:
   Output: false
 """
 # 解題思維: 長度相等且頻率相等
-class Solution:
+class Solution1:
     def isAnagram(self, s: str, t: str) -> bool:
         is_anagram = False
         symbols = set(s)
@@ -20,5 +20,17 @@ class Solution:
             s_freq[symbol] = s.count(symbol)
             t_freq[symbol] = t.count(symbol)
         if s_freq == t_freq and len(s) == len(t):
+            is_anagram = True
+        return is_anagram
+/*長度一樣，且頻率一樣，但內容不同，就是*/
+class Solution1:
+    def isAnagram(self, s: str, t: str) -> bool:
+        is_anagram = False
+        if len(s) == 1 and s == t:
+            is_anagram = True
+            return is_anagram
+        s_freq = Counter(s)
+        t_freq = Counter(t)
+        if s_freq == t_freq and s != t:
             is_anagram = True
         return is_anagram
