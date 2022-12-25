@@ -26,3 +26,13 @@ class Solution2:
                 return True
             hashset.add(n)
         return False
+
+class Solution3:
+    def containsDuplicate(self, nums: List[int]) -> bool:
+        is_duplicate = False
+        frequency = Counter(nums)
+        for key, value in frequency.items():
+            if value > 1:
+                is_duplicate = True
+                break
+        return is_duplicate
