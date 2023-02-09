@@ -10,11 +10,19 @@ Example 2:
   Output: ""
   Explanation: There is no common prefix among the input strings.
 """
-#
-#
-#
-#
-#
+strs[0] = flower
+#   i        | 0    | 0   | 0  
+#-----------------------------------------
+#   s        |flower|flow |flight
+# ----------------------------------------- 
+#  s[i]      | f    | f   | f
+#-------------------------------------------
+#  len(s)    | 6    | 4   | 6
+#--------------------------------------------
+# strs[0][i] | f    | l   | o
+# ------------------------------------------
+# prefix     | f    | fl  | fl
+
 class Solution:
     def longestCommonPrefix(self, strs: List[str]) -> str:
         prefix = ""
